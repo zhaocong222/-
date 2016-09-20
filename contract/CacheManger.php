@@ -19,6 +19,9 @@ class CacheManger extends Contract implements FactoryContract
         return isset($this->stores[$name]) ? $this->stores[$name] : $this->get($name);
     }
 
+    /*
+     * 获取配置文件里面的 对应驱动配置
+     */
     private function get($name)
     {
         $config = $this->getConfig($name);
@@ -26,6 +29,7 @@ class CacheManger extends Contract implements FactoryContract
         if (is_null($config))
             throw new \Exception("Cache store [{$name}] is not defined.");
 
+        //执行缓存驱动方法
         $driveMethod = 'create'.ucwords($name).'Driver';
         if (method_exists($this,$driveMethod))
             return call_user_func([$this,$driveMethod],$config);
@@ -74,6 +78,7 @@ class CacheManger extends Contract implements FactoryContract
     
     public function __call($method,$parameters)
     {
+        //返回的都是 *Store 对象
         return call_user_func_array([$this->store(),$method],$parameters);
     }
 

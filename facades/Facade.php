@@ -47,7 +47,7 @@ abstract class Facade
 
         if (is_null($instance))
             throw new \Exception(get_class($instance).' is error');
-        
+        //$method -> get 私有 执行 __call
         return call_user_func_array([$instance,$method],$args);
     }
 
